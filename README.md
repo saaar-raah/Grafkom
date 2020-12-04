@@ -2,7 +2,7 @@
 Pembuatan program flappy bird
 
 ## Oleh :
-### Kelompok 4
+### Kelompok 1
 1. Azan Suwandi
 2. Fathima Azzahra
 3. Imelda Nur Amalia
