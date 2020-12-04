@@ -1,6 +1,7 @@
 # Grafkom
+Pembuatan program flappy bird
 
-#Oleh :
+# Oleh :
 Kelompok 4
 1. Azan Suwandi
 2. Fathima Azzahra
