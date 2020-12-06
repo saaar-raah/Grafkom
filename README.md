@@ -1,5 +1,5 @@
 # Grafika Komputer
-Pembuatan program flappy bird
+Pembuatan program jam analog
 
 ## Oleh :
 ### Kelompok 1
