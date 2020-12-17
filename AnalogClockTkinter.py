@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas
+from tkinter import Tk, Canvas, Label
 from math import sin, cos, radians
 from datetime import datetime
 
@@ -18,47 +18,54 @@ class Point:
 
 class ClockHands:  
     tKinter = Tk()
-    longHand = "" 
-    shortHand = "" 
+    minuteHand = "" 
+    hourHand = "" 
     secondHand = ""
     cornerCircle1, cornerCircle2 = Point(120, 70), Point(210, 210)    
-
+    
     def centerPoint(self):
         return Point(((self.cornerCircle1.x + self.cornerCircle2.x)/2), ((self.cornerCircle1.y + self.cornerCircle2.y)/2))        
 
-    def updateClock(self, canvas):             
+    def updateClock(self, canvas):           
+          
         def initHand(hand, color, width):
             if hand == "":
-                hand = canvas.create_line(0,0,0,0,\
-                    fill = color, width = width, capstyle = "round")
+                hand = canvas.create_line(0,0,0,0, fill = color, width = width, capstyle = "round")
                 canvas.pack()
             return hand
 
         def drawHand(Hand, angle, length):
+            angle -= 90
             rads = radians(angle)
             center = self.centerPoint()
             endPoint = center.offsetByVector(rads, length)
             canvas.coords(Hand, center.x, center.y, endPoint.x, endPoint.y)
 
         self.secondHand = initHand(self.secondHand, "red", 1)
+        self.minuteHand = initHand(self.minuteHand, "white", 2)
+        self.hourHand = initHand(self.hourHand, "white", 2)
+
         drawHand(self.secondHand, datetime.now().second, 70)
+        drawHand(self.minuteHand, datetime.now().minute, 60)
+        drawHand(self.hourHand, datetime.now().hour, 50)
+
         rotate = lambda: self.updateClock(canvas)
     #   print(time)        
         # mengulang selama 100 milisecond
         canvas.after(200, rotate)
-    
+            
     def run(self):
         self.tKinter.mainloop()
 
-    def __init__(self):
+    def __init__(self, lokasi):
+        self.lokasi = lokasi
         canvas = Canvas(self.tKinter, width=320, height=300)
         canvas.configure(bg="black")
         
         canvas.create_oval(self.cornerCircle1.x, self.cornerCircle1.y, self.cornerCircle2.x, self.cornerCircle2.y, fill = "black", width = 3)
         center = self.centerPoint()
-
+        
         def createTickMark(angle, dFromCenter, length, mark):
-            angle -= 90.0
             rads = radians(angle)
             p1 = center.offsetByVector(rads, dFromCenter)
             p2 = center.offsetByVector(rads, dFromCenter + length)
@@ -74,12 +81,14 @@ class ClockHands:
         #GARIS PADA JAM
         for angle in range(0, 360, 30):
             createTickMark(angle, 80, 19, lg_Tick)
-        canvas.pack()
         
+        canvas.pack()
+        canvas.create_text(160, 280, text = "Waktu {}".format(self.lokasi), fill="white", font = ('Gothic', 20))
         self.tKinter.wm_title("JAM ANALOG By Kelompok 01")
         #Prepare the code to be run in the main loop   
         self.updateClock(canvas)
+        
 
 if __name__ == "__main__":
-    clockDigital = ClockHands()
+    clockDigital = ClockHands("Disini")
     clockDigital.run()
