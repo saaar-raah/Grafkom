@@ -3,8 +3,6 @@ from math import sin, cos, radians
 from datetime import datetime
 
 class Point:
-    x = 0
-    y = 0
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -23,25 +21,39 @@ class ClockHands:
     longHand = "" 
     shortHand = "" 
     secondHand = ""
-    cornerCircle1 = Point(10, 10)
-    cornerCircle2 = Point(210, 210)
-    
+    cornerCircle1, cornerCircle2 = Point(120, 70), Point(210, 210)    
 
     def centerPoint(self):
         return Point(((self.cornerCircle1.x + self.cornerCircle2.x)/2), ((self.cornerCircle1.y + self.cornerCircle2.y)/2))        
 
-    def updateClock(self, canvas):        
+    def updateClock(self, canvas):             
+        def initHand(hand, color, width):
+            if hand == "":
+                hand = canvas.create_line(0,0,0,0,\
+                    fill = color, width = width, capstyle = "round")
+                canvas.pack()
+            return hand
+
+        def drawHand(Hand, angle, length):
+            rads = radians(angle)
+            center = self.centerPoint()
+            endPoint = center.offsetByVector(rads, length)
+            canvas.coords(Hand, center.x, center.y, endPoint.x, endPoint.y)
+
+        self.secondHand = initHand(self.secondHand, "red", 1)
+        drawHand(self.secondHand, datetime.now().second, 70)
         rotate = lambda: self.updateClock(canvas)
-    #   print(time)
+    #   print(time)        
         # mengulang selama 100 milisecond
-        canvas.after(100, rotate)
+        canvas.after(200, rotate)
     
     def run(self):
         self.tKinter.mainloop()
 
     def __init__(self):
-        canvas = Canvas(self.tKinter, width=220, height=220)
+        canvas = Canvas(self.tKinter, width=320, height=300)
         canvas.configure(bg="black")
+        
         canvas.create_oval(self.cornerCircle1.x, self.cornerCircle1.y, self.cornerCircle2.x, self.cornerCircle2.y, fill = "black", width = 3)
         center = self.centerPoint()
 
@@ -53,8 +65,8 @@ class ClockHands:
             mark(p1, p2)
 
         #BUAT GARIS PADA JAM
-        sm_Tick = lambda p1, p2: canvas.create_line(p1.x, p1.y, p2.x, p2.y, fill = "white")
-        lg_Tick = lambda p1, p2: canvas.create_line(p1.x, p1.y, p2.x, p2.y, fill = 'red', width=3)
+        sm_Tick = lambda p1, p2: canvas.create_line(p1.x, p1.y, p2.x, p2.y, fill = "white", width=2)
+        lg_Tick = lambda p1, p2: canvas.create_line(p1.x, p1.y, p2.x, p2.y, fill = "red", width=3)
 
         #GARIS PADA MENIT
         for angle in range(0, 360, 6):
@@ -62,12 +74,12 @@ class ClockHands:
         #GARIS PADA JAM
         for angle in range(0, 360, 30):
             createTickMark(angle, 80, 19, lg_Tick)
-
         canvas.pack()
+        
         self.tKinter.wm_title("JAM ANALOG By Kelompok 01")
         #Prepare the code to be run in the main loop   
         self.updateClock(canvas)
 
 if __name__ == "__main__":
-    Hand = ClockHands()
-    Hand.run()
+    clockDigital = ClockHands()
+    clockDigital.run()
