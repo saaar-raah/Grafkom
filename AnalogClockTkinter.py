@@ -47,7 +47,7 @@ class ClockHands:
 
         drawHand(self.secondHand, datetime.now().second, 70)
         drawHand(self.minuteHand, datetime.now().minute, 60)
-        drawHand(self.hourHand, datetime.now().hour, 50)
+        drawHand(self.hourHand, datetime.now().hour, 40)
 
         rotate = lambda: self.updateClock(canvas)
     #   print(time)        
