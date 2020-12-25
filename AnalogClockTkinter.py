@@ -35,7 +35,7 @@ class ClockHands:
             return hand
 
         def drawHand(Hand, angle, length):
-            angle -= 90
+            angle -= 90.0
             rads = radians(angle)
             center = self.centerPoint()
             endPoint = center.offsetByVector(rads, length)
@@ -45,20 +45,21 @@ class ClockHands:
         self.minuteHand = initHand(self.minuteHand, "white", 2)
         self.hourHand = initHand(self.hourHand, "white", 2)
 
-        drawHand(self.secondHand, datetime.now().second, 70)
-        drawHand(self.minuteHand, datetime.now().minute, 60)
-        drawHand(self.hourHand, datetime.now().hour, 40)
+        # JARUM DETIK
+        drawHand(self.secondHand, (datetime.now().second * 6), 70) # @params = Hand, angle, length
+        # JARUM MENIT
+        drawHand(self.minuteHand, ((datetime.now().minute * 6) + (6 * (datetime.now().second/60))), 60)
+        # JARUM JAM
+        drawHand(self.hourHand, ((datetime.now().hour * 30) + (30 * (datetime.now().minute/60))), 40)
 
         rotate = lambda: self.updateClock(canvas)
-    #   print(time)        
         # mengulang selama 100 milisecond
         canvas.after(200, rotate)
             
     def run(self):
         self.tKinter.mainloop()
 
-    def __init__(self, lokasi):
-        self.lokasi = lokasi
+    def __init__(self):
         canvas = Canvas(self.tKinter, width=320, height=300)
         canvas.configure(bg="black")
         
@@ -66,6 +67,7 @@ class ClockHands:
         center = self.centerPoint()
         
         def createTickMark(angle, dFromCenter, length, mark):
+            angle -= 90.0
             rads = radians(angle)
             p1 = center.offsetByVector(rads, dFromCenter)
             p2 = center.offsetByVector(rads, dFromCenter + length)
@@ -83,12 +85,11 @@ class ClockHands:
             createTickMark(angle, 80, 19, lg_Tick)
         
         canvas.pack()
-        canvas.create_text(160, 280, text = "Waktu {}".format(self.lokasi), fill="white", font = ('Gothic', 20))
+        canvas.create_text(160, 280, text = "KELOMPOK 01", fill="white", font = ('Gothic', 20))
         self.tKinter.wm_title("JAM ANALOG By Kelompok 01")
         #Prepare the code to be run in the main loop   
         self.updateClock(canvas)
         
-
 if __name__ == "__main__":
-    clockDigital = ClockHands("Disini")
+    clockDigital = ClockHands()
     clockDigital.run()
