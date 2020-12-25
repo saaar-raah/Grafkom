@@ -36,10 +36,8 @@ class ClockHands:
 
         def drawHand(Hand, angle, length):
             angle -= 90.0
-            rads = radians(angle)
-            center = self.centerPoint()
-            endPoint = center.offsetByVector(rads, length)
-            canvas.coords(Hand, center.x, center.y, endPoint.x, endPoint.y)
+            endPoint = self.centerPoint().offsetByVector(radians(angle), length)
+            canvas.coords(Hand, self.centerPoint().x, self.centerPoint().y, endPoint.x, endPoint.y)
 
         self.secondHand = initHand(self.secondHand, "red", 1)
         self.minuteHand = initHand(self.minuteHand, "white", 2)
@@ -64,14 +62,10 @@ class ClockHands:
         canvas.configure(bg="black")
         
         canvas.create_oval(self.cornerCircle1.x, self.cornerCircle1.y, self.cornerCircle2.x, self.cornerCircle2.y, fill = "black", width = 3)
-        center = self.centerPoint()
         
         def createTickMark(angle, dFromCenter, length, mark):
             angle -= 90.0
-            rads = radians(angle)
-            p1 = center.offsetByVector(rads, dFromCenter)
-            p2 = center.offsetByVector(rads, dFromCenter + length)
-            mark(p1, p2)
+            mark(self.centerPoint().offsetByVector(radians(angle), dFromCenter), self.centerPoint().offsetByVector(radians(angle), dFromCenter + length))
 
         #BUAT GARIS PADA JAM
         sm_Tick = lambda p1, p2: canvas.create_line(p1.x, p1.y, p2.x, p2.y, fill = "white", width=2)
